@@ -161,7 +161,9 @@ def main() -> None:
         "sitadel_millesime": MILLESIME,
         "sitadel_fichiers": SITADEL_FILES,
         "finess_url": FINESS_URL,
-        "nb_permis": int(len(permis)),
+        # un permis mixte (logements + locaux) apparaît dans LES DEUX fichiers : 1 ligne par fichier
+        "nb_lignes": int(len(permis)),
+        "nb_permis_distincts": int(permis["NUM_DAU"].nunique()),
         "nb_demandeurs": int(permis["SIREN_DEM"].nunique()),
         "nb_demandeurs_dans_finess": int(permis.loc[permis["dans_finess"], "SIREN_DEM"].nunique()),
     }

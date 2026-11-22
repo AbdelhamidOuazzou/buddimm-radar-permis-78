@@ -15,20 +15,24 @@ Buddimm (structures médico-sociales, ESS, bailleurs sociaux) ?
 | FINESS, extraction du fichier des établissements (ministère des Solidarités et de la Santé, data.gouv.fr) | confirmer qu'un demandeur gère des établissements sociaux / médico-sociaux | mai 2026 |
 | Nomenclatures INSEE : catégories juridiques (2022-09) et NAF rév. 2 | libellés officiels des codes (`ref/`) | — |
 | API « Recherche d'entreprises » (Sirène, api.gouv.fr) | activité et état d'un demandeur, pour l'agent | consultée à l'exécution |
+| Code de l'urbanisme, art. R*424-17, et décret n° 2025-461 du 26 mai 2025 (Légifrance) | durée de validité d'un permis | consultés le 22/11/2026 |
 
 Chaque ligne produite garde sa source (`source`, n° de permis, n° FINESS dans la colonne `preuve`).
 
-## Architecture : un entonnoir à trois filtres
+## Architecture : un entonnoir à trois filtres, puis les patterns
 
 ```
 Sitadel 78 (PC, personnes morales)     FINESS (toute la France)
         └──────────── load_data.py ─────────────┘
-                           │  7 608 permis, 3 957 demandeurs (SIREN distincts)
+                           │  7 092 permis distincts (7 608 lignes : 516 permis mixtes sont dans
+                           │  les deux fichiers), 3 957 demandeurs (SIREN distincts)
                  filter1.py │ règles sur la forme juridique (INSEE) — s'abstient si elle ne dit rien
                  filter2.py │ FINESS : le demandeur gère-t-il des établissements sociaux / médico-sociaux ?
                  filter3.py │ agent LLM + outils (permis, Sirène, FINESS) + garde-fou, sur une sélection
                            ▼
           famille · confiance (sur / probable / a_verifier) · règle · preuve · source
+                           │
+                patterns.py │ clients réguliers · projets sociaux « cachés » · échéances · fiches
 ```
 
 Principe : l'IA n'intervient qu'en dernier, là où les règles ne suffisent pas. Un demandeur non classable
@@ -42,9 +46,9 @@ reste **« non déterminé »**.
 - l'agent ne peut jamais répondre « sûr » (réservé aux règles et à FINESS) ;
 - il ne peut interroger que le demandeur en cours ; le champ « dirigeants » de Sirène n'est jamais repris.
 
-## Résultats mesurés
+## Résultats
 
-Sur les 3 957 demandeurs :
+### Qualification des 3 957 demandeurs
 
 | Étape | Résultat |
 |---|---|
@@ -53,7 +57,28 @@ Sur les 3 957 demandeurs :
 | **Demandeurs réellement qualifiés (famille et activité connues)** | **497 sur 3 957 (13 %)** |
 | Reste | 1 721 SCI/SCCV, ~1 630 sans famille, 108 associations d'activité inconnue |
 
-**Évaluation de l'agent, sans l'outil FINESS** (`evaluate.py`, 40 cas, vérité terrain = FINESS + forme juridique) :
+### Patterns (`patterns.py`, sorties dans `results/`)
+
+| Pattern | Résultat | Fichier |
+|---|---|---|
+| **Clients réguliers** (≥ 3 permis sur ≥ 3 années) | 362 demandeurs réguliers, dont **39 structures cibles** (25 bailleurs sociaux, 14 médico-sociaux) | `prospects_reguliers.csv` |
+| **Projets sociaux / médico-sociaux « cachés »** : permis de résidence pour personnes âgées, handicapées ou sociale | **68 permis (55 demandeurs), dont 4 seulement déposés par une association ou fondation** ; 39 par un demandeur qui n'est pas une structure cible (promoteurs, SCCV, sociétés non qualifiées) | `projets_sociaux.csv` |
+| **Échéances** : permis autorisés, sans aucune déclaration de chantier, dont la validité théorique échoit dans les 12 mois | **16 permis** à vérifier | `echeances.csv` |
+| **Fiches prospects** : les 10 structures cibles au score le plus élevé, avec leurs permis sourcés | 10 fiches | `fiches_prospects.md` |
+
+Lecture métier : un filtre « associations seulement » raterait presque tous les projets de résidences
+sociales, seniors ou handicap du département — ils sont déposés par des bailleurs, des promoteurs ou des
+sociétés de projet. Le demandeur n'est pas forcément l'exploitant : ces projets sont des pistes à creuser,
+pas des clients confirmés.
+
+Règle de validité utilisée pour les échéances : art. R*424-17 (permis périmé si les travaux ne sont pas
+entrepris dans les 3 ans de la notification) ; décret n° 2025-461 : 5 ans pour les permis intervenus entre le
+28/05/2022 et le 28/05/2024. Approximations : date d'autorisation à la place de la notification ;
+prorogations et recours ignorés ; ≈ 15 % des ouvertures de chantier ne sont jamais déclarées dans Sitadel.
+
+### Évaluation de l'agent, sans l'outil FINESS
+
+`evaluate.py`, 40 cas, vérité terrain = FINESS + forme juridique :
 
 | Version | Médico-sociaux retrouvés (33) | Bailleurs témoins (7) |
 |---|---|---|
@@ -68,23 +93,24 @@ des familles absurdes.
 
 ## Ce qui est établi, fragile, ou manque
 
-- **Établi** : les chiffres ci-dessus sont reproductibles (`load_data.py` puis filtres) ; 42 tests passent ;
-  les décisions enregistrées de l'agent sont rejouées par un test d'audit.
+- **Établi** : les chiffres ci-dessus sont reproductibles (`load_data.py`, filtres, `patterns.py`) ;
+  53 tests passent ; les décisions enregistrées de l'agent sont rejouées par un test d'audit.
 - **Fragile** :
   - la vérité terrain ne couvre que des demandeurs présents dans FINESS : elle mesure le rappel, pas les fausses alertes ;
   - 40 cas seulement ; les 7 bailleurs sont faciles (le nom contient « HLM ») ;
   - le mot `medico_social` recouvre aussi du *social* (résidences sociales, protection de l'enfance) ;
   - « absent de FINESS » est un indice faible (il compte parfois comme preuve pour l'agent) ;
-  - les règles par le nom (bailleurs sociaux) sont volontairement étroites et marquées « probable ».
+  - les règles par le nom (bailleurs sociaux) sont volontairement étroites et marquées « probable » ;
+  - le sens des codes `ETAT_DAU` n'est pas documenté dans les sources consultées : il est **inféré des données**
+    (2 = aucune date de chantier, 5 = chantier ouvert, 6 = achevé, 4 = probablement annulé) ;
+  - les seuils (3 permis, 3 années, 12 mois) sont des choix, pas des normes.
 - **Manque / non fait** :
-  - l'agent n'a été lancé que sur 4 + 40 + 40 demandeurs (essais et évaluation), **pas sur la sélection de 200** prévue ;
-  - les **patterns** (clients réguliers, projets médico-sociaux « cachés » derrière une société, signal de
-    timing) ont été explorés à la main (nombre de demandeurs réguliers, 68 permis de résidences sociales,
-    seniors ou handicap dont presque aucun n'est déposé par une association) mais **ne sont pas encore codés** ;
-  - pas de fiches de prospects ;
-  - la durée de validité d'un permis (pour le signal « autorisé depuis longtemps sans ouverture de chantier »)
-    n'a pas été vérifiée sur Légifrance ; ce signal est de toute façon fragile (≈ 15 % des ouvertures de
-    chantier ne sont jamais déclarées).
+  - l'agent n'a été lancé que pour des essais et l'évaluation, **pas sur la sélection de 200 demandeurs** :
+    les patterns reposent donc sur les filtres 1 et 2 seulement (`patterns.py` intègre automatiquement les
+    décisions de l'agent quand `data/processed/agent_results.jsonl` existe) ;
+  - les SCCV ne sont pas rattachées à leur groupe (promoteur, bailleur) ;
+  - pas de lien avec les appels à projets médico-sociaux (piste naturelle : une association autorisée après
+    un appel à projets doit ensuite construire ou trouver des locaux).
 
 Limites de la base Sitadel prises en compte : dénomination diffusée seulement pour les personnes morales
 retrouvées dans Sirène ; ouvertures et achèvements de chantier parfois non déclarés ; une ligne par permis
@@ -101,6 +127,7 @@ cp .env.example .env     # puis renseigner OPENAI_API_KEY (jamais commitée)
 python filter3.py --dry-run          # voir qui serait envoyé à l'agent
 python filter3.py --max 20           # lancer l'agent (reprend là où il s'est arrêté)
 python evaluate.py                   # évaluer l'agent sans FINESS
+python patterns.py                   # patterns + fiches dans results/
 python -m pytest -q                  # tests
 ```
 
@@ -115,9 +142,10 @@ L'agent utilise une API compatible OpenAI (`OPENAI_BASE_URL`, `OPENAI_API_KEY`, 
 | `filter2.py` | croisement FINESS |
 | `filter3.py`, `tools.py` | agent, outils, garde-fou |
 | `evaluate.py` | évaluation sans FINESS |
-| `test_filters.py`, `test_agent.py` | 42 tests (règles, FINESS, outils, garde-fou, cohérence des données, audit des décisions) |
+| `patterns.py` | clients réguliers, projets sociaux, échéances, fiches prospects |
+| `test_filters.py`, `test_agent.py`, `test_patterns.py` | 53 tests (règles, FINESS, outils, garde-fou, patterns, cohérence des données, audit des décisions) |
 | `ref/` | nomenclatures officielles INSEE |
-| `results/` | résultats des évaluations |
+| `results/` | évaluations de l'agent, patterns et fiches |
 
 ## Données personnelles et cadence
 

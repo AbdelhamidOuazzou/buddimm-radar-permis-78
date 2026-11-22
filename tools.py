@@ -80,7 +80,7 @@ class Tools:
         annees = sorted(g["DATE_REELLE_AUTORISATION"].dropna().str[:4].unique())
         return {
             "found": True,
-            "nb_permis": int(len(g)),
+            "nb_permis": int(g["NUM_DAU"].nunique()),  # un permis mixte a une ligne par fichier
             "nb_permis_fichier_logements": int((g["fichier"] == "logements").sum()),
             "nb_permis_fichier_locaux": int((g["fichier"] == "locaux").sum()),
             "annees_autorisation": annees,
@@ -90,7 +90,7 @@ class Tools:
             "nb_permis_residence_personnes_agees": flag("RES_PERS_AGEES"),
             "nb_permis_residence_handicapes": flag("RES_HANDICAPES"),
             "nb_permis_residence_sociale": flag("RES_SOCIALE"),
-            "exemples_num_permis": list(g["NUM_DAU"].head(5)),
+            "exemples_num_permis": list(g["NUM_DAU"].drop_duplicates().head(5)),
             "source": "Sitadel (SDES, DiDo), permis du département 78",
         }
 

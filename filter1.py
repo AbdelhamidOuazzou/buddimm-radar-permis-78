@@ -87,7 +87,7 @@ def main() -> None:
         .agg(
             denomination=("DENOM_DEM", "first"),
             cj=("CJ_DEM", "first"),
-            nb_permis=("NUM_DAU", "count"),
+            nb_permis=("NUM_DAU", "nunique"),  # un permis mixte a une ligne dans chaque fichier
             dans_finess=("dans_finess", "first"),
         )
         .reset_index()
@@ -99,9 +99,17 @@ def main() -> None:
     dem["famille"] = [r[0] for r in res]
     dem["confiance"] = [r[1] for r in res]
     dem["regle"] = [r[2] for r in res]
+    def preuve(cj, lib, fam, regle, nom):
+        if not fam:
+            return ""
+        txt = f"CJ {cj} = {lib} (INSEE, nomenclature 2022-09)"
+        m = NOM_BAILLEUR.search(norm(nom)) if regle in {"R02", "R11"} and isinstance(nom, str) else None
+        if m:  # pour les règles par le nom, la preuve est le motif trouvé dans la dénomination
+            txt += f" ; dénomination contient « {m.group(0)} »"
+        return txt
+
     dem["preuve"] = [
-        f"CJ {cj} = {lib} (INSEE, nomenclature 2022-09)" if fam else ""
-        for cj, lib, fam in zip(dem["cj"], dem["cj_libelle"], dem["famille"])
+        preuve(*v) for v in zip(dem["cj"], dem["cj_libelle"], dem["famille"], dem["regle"], dem["denomination"])
     ]
     dem.to_csv(OUT, index=False)
 

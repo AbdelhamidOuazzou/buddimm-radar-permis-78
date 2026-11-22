@@ -109,7 +109,8 @@ def test_permis_sont_dans_le_perimetre(d):
 def test_meta_correspond_aux_donnees(d):
     permis, _ = d
     meta = json.loads((DATA / "meta.json").read_text(encoding="utf-8"))
-    assert meta["nb_permis"] == len(permis)
+    assert meta["nb_lignes"] == len(permis)
+    assert meta["nb_permis_distincts"] == permis["NUM_DAU"].nunique() < len(permis)
     assert meta["nb_demandeurs"] == permis["SIREN_DEM"].nunique()
     assert meta["sitadel_millesime"] and meta["date_chargement"]
 
@@ -128,7 +129,9 @@ def test_demandeurs_coherents(d):
     permis, f2 = d
     assert f2["siren"].is_unique
     assert set(f2["siren"]) == set(permis["SIREN_DEM"])
-    assert f2["nb_permis"].astype(int).sum() == len(permis)
+    # un permis mixte (logements + locaux) a 2 lignes mais ne compte qu'une fois
+    assert f2["nb_permis"].astype(int).sum() == permis["NUM_DAU"].nunique()
+    assert permis.groupby("NUM_DAU")["SIREN_DEM"].nunique().max() == 1, "un permis = un seul demandeur"
     ok = {"public", "medico_social", "bailleur_social", "association_fondation", "ess_autre",
           "societe_civile_immo", "autre", "sante"}
     assert set(f2["famille"].dropna()) <= ok
