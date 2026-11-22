@@ -276,6 +276,8 @@ def main() -> None:
             except Exception as e:  # noqa: BLE001 : on note l'erreur et on continue
                 erreurs += 1
                 print(f"  ! {row['siren']} : {type(e).__name__}")
+                if "budget" in str(e).lower():  # budget de la clé épuisé : inutile d'insister
+                    sys.exit("Arrêt : budget de la clé API épuisé. Relancer reprendra au demandeur suivant.")
                 if "401" in str(e) or "Authentication" in type(e).__name__ or erreurs >= 5:
                     sys.exit("Arrêt : problème d'authentification ou erreurs répétées.")
                 continue

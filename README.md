@@ -62,7 +62,7 @@ reste **« non déterminé »**.
 | Pattern | Résultat | Fichier |
 |---|---|---|
 | **Clients réguliers** (≥ 3 permis sur ≥ 3 années) | 362 demandeurs réguliers, dont **39 structures cibles** (25 bailleurs sociaux, 14 médico-sociaux) | `prospects_reguliers.csv` |
-| **Projets sociaux / médico-sociaux « cachés »** : permis de résidence pour personnes âgées, handicapées ou sociale | **68 permis (55 demandeurs), dont 4 seulement déposés par une association ou fondation** ; 39 par un demandeur qui n'est pas une structure cible (promoteurs, SCCV, sociétés non qualifiées) | `projets_sociaux.csv` |
+| **Projets sociaux / médico-sociaux « cachés »** : permis de résidence pour personnes âgées, handicapées ou sociale | **68 permis (55 demandeurs), dont 4 seulement déposés par une association ou fondation** ; 39 par un demandeur qui n'est pas une structure cible : 23 classés « autre » par l'agent (promotion immobilière d'après Sirène : Bouygues Immobilier, Eiffage, Linkcity, Altarea Cogedim…) et 16 SCI/SCCV | `projets_sociaux.csv` |
 | **Échéances** : permis autorisés, sans aucune déclaration de chantier, dont la validité théorique échoit dans les 12 mois | **16 permis** à vérifier | `echeances.csv` |
 | **Fiches prospects** : les 10 structures cibles au score le plus élevé, avec leurs permis sourcés | 10 fiches | `fiches_prospects.md` |
 
@@ -75,6 +75,28 @@ Règle de validité utilisée pour les échéances : art. R*424-17 (permis péri
 entrepris dans les 3 ans de la notification) ; décret n° 2025-461 : 5 ans pour les permis intervenus entre le
 28/05/2022 et le 28/05/2024. Approximations : date d'autorisation à la place de la notification ;
 prorogations et recours ignorés ; ≈ 15 % des ouvertures de chantier ne sont jamais déclarées dans Sitadel.
+
+### Passage de l'agent sur la sélection
+
+Sélection de 200 demandeurs non tranchés par les règles : d'abord ceux qui ont un permis de résidence
+sociale / seniors / handicap (39), puis les associations d'activité inconnue (108), puis les plus actifs.
+**L'agent en a traité 106** : le plafond de dépense fixé sur la clé API utilisée a été atteint avant la fin
+(`python filter3.py` reprend au demandeur suivant).
+
+| Décision de l'agent | Nombre |
+|---|---|
+| association_fondation (activité non médico-sociale ou inconnue : sport, culte, enseignement…) | 67 |
+| autre (essentiellement promotion immobilière, preuve : libellé NAF Sirène) | 22 |
+| societe_civile_immo (SCI/SCCV, rien de plus trouvé) | 16 |
+| sante | 1 |
+
+Toutes les décisions ont au moins une preuve vérifiée ; **aucune preuve citée n'a été rejetée** par le garde-fou ;
+toutes sont « probable » (103) ou « à vérifier » (3). Détail : `results/decisions_agent.csv`.
+
+Ce que ça apprend : l'agent n'a trouvé **aucune nouvelle structure cible** parmi ces 106 demandeurs. Son
+apport ici est de *trier* : il écarte les associations hors champ et confirme que les projets de résidences
+« cachés » sont portés par des promoteurs — l'exploitant reste à identifier, ce que les sources utilisées ne
+permettent pas.
 
 ### Évaluation de l'agent, sans l'outil FINESS
 
@@ -105,9 +127,8 @@ des familles absurdes.
     (2 = aucune date de chantier, 5 = chantier ouvert, 6 = achevé, 4 = probablement annulé) ;
   - les seuils (3 permis, 3 années, 12 mois) sont des choix, pas des normes.
 - **Manque / non fait** :
-  - l'agent n'a été lancé que pour des essais et l'évaluation, **pas sur la sélection de 200 demandeurs** :
-    les patterns reposent donc sur les filtres 1 et 2 seulement (`patterns.py` intègre automatiquement les
-    décisions de l'agent quand `data/processed/agent_results.jsonl` existe) ;
+  - l'agent n'a traité que **106 des 200 demandeurs sélectionnés** (budget de la clé épuisé), et aucun des
+    ~3 250 autres demandeurs non tranchés : ils restent « non déterminés » ;
   - les SCCV ne sont pas rattachées à leur groupe (promoteur, bailleur) ;
   - pas de lien avec les appels à projets médico-sociaux (piste naturelle : une association autorisée après
     un appel à projets doit ensuite construire ou trouver des locaux).
@@ -145,7 +166,7 @@ L'agent utilise une API compatible OpenAI (`OPENAI_BASE_URL`, `OPENAI_API_KEY`, 
 | `patterns.py` | clients réguliers, projets sociaux, échéances, fiches prospects |
 | `test_filters.py`, `test_agent.py`, `test_patterns.py` | 53 tests (règles, FINESS, outils, garde-fou, patterns, cohérence des données, audit des décisions) |
 | `ref/` | nomenclatures officielles INSEE |
-| `results/` | évaluations de l'agent, patterns et fiches |
+| `results/` | évaluations et décisions de l'agent, patterns et fiches |
 
 ## Données personnelles et cadence
 

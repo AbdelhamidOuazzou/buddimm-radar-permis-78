@@ -68,6 +68,26 @@ def appliquer_agent(dem: pd.DataFrame, fichier: Path) -> pd.DataFrame:
     return dem
 
 
+def exporter_decisions_agent(fichier: Path, sortie: Path) -> pd.DataFrame | None:
+    """Table lisible des décisions de l'agent (pour relecture humaine et pour le dépôt)."""
+    if not fichier.exists():
+        return None
+    rows = []
+    for line in fichier.read_text(encoding="utf-8").splitlines():
+        r = json.loads(line)
+        d = r["decision"]
+        rows.append({
+            "siren": r["siren"], "denomination": r["denomination"], "famille": d["famille"],
+            "confiance": d["confiance"], "garde_fou": d["garde_fou"],
+            "preuves_verifiees": "; ".join(f"{p['tool']}.{p['field']}={p['value']}" for p in d["preuves_verifiees"]),
+            "nb_preuves_rejetees": len(d["preuves_rejetees"]), "explication": d["explication"],
+            "outils": ",".join(a["outil"] for a in r["appels"]), "modele": r["modele"], "tokens": r["tokens"],
+        })
+    df = pd.DataFrame(rows)
+    df.to_csv(sortie, index=False)
+    return df
+
+
 # ------------------------------------------------------------------ pattern 1
 def reguliers(permis, dem, min_permis: int = 3, min_annees: int = 3) -> pd.DataFrame:
     g = permis.groupby("SIREN_DEM").agg(
@@ -205,6 +225,10 @@ def main() -> None:
     sc = score_prospects(dem, reg, proj, ech)
 
     OUT.mkdir(exist_ok=True)
+    dec = exporter_decisions_agent(DATA / "agent_results.jsonl", OUT / "decisions_agent.csv")
+    if dec is not None:
+        print(f"Décisions de l'agent intégrées : {len(dec)}")
+        print(dec["famille"].value_counts().to_string())
     reg[reg["famille"].isin(CIBLES)].to_csv(OUT / "prospects_reguliers.csv", index=False)
     proj.to_csv(OUT / "projets_sociaux.csv", index=False)
     ech.to_csv(OUT / "echeances.csv", index=False)
