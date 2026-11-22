@@ -1,0 +1,41 @@
+siren,denomination,cj,attendu,agent,confiance,garde_fou,outils,ok
+304425598,APAJH COMITE DES YVELINES,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+332468032,ACTIONS ET RESSOURCES POUR L'INSERTION SOCIALE PAR LE SOIN ET L'EDUCATION,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+340800754,ASS L ARCHE D AIGREFOIN,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+380690511,ASSOCIATION DELOS APEI 78,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+383349107,FREHA,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+390074193,HANDI VAL DE SEINE ASSOCIATION DE GESTION,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+403706807,ASSOCIATION LES CHEMINS DE L'EVEIL,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+404079022,ASSSOC ACCUEIL PERS HANDIC PERS AGEES,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+419824669,LA GERBE,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+447729880,HESTIA 78,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+521504969,FONDATION DIACONESSES DE REUILLY,9300,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+530342740,FONDATION DES AMIS DE L'ATELIER,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+538465808,AUTISME EN YVELINES,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+775657612,FONDATION COGNACQ JAY,9300,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+775666530,SOC PHILANTHROPIQUE,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+775666803,FONDATION SOS VILLAGES D'ENFANTS,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+775667181,FONDATION MALLET,9300,medico_social,sante,probable,ok,"lookup_sirene,get_permis",False
+775672165,FONDATION LEOPOLD BELLAN,9300,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+775672272,CROIX ROUGE FRANCAISE,9230,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+775672462,ASSOC ENTRAIDE UNIVERSITAIRE,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+775676349,FONDATION L ELAN RETROUVE,9300,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+775685506,JEUNESSE CULTURE LOISIRS TECHNIQUE,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+775708183,ASS POUR INSERTION EDUCATION ET SOINS,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+775708746,SAUVEGARDE ENFANCE ADOLESCENCE YVELINES,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+781669601,FONDATION JOHN BOST,9300,medico_social,sante,probable,ok,"lookup_sirene,get_permis",False
+784615379,ASSOCIATION DES DAMES DU CALVAIRE,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+785039058,AVENIR APEI,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+785098294,FONDATION ANNE DE GAULLE,9300,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+785121294,VIVRE ENSEMBLE,8210,medico_social,ess_autre,probable,ok,"lookup_sirene,get_permis",False
+785123936,MAISON RETRAITE RELIGIEUSES AUGUSTINES,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+808269708,CHEMINS D'ESPERANCE,9220,medico_social,medico_social,probable,ok,"lookup_sirene,get_permis",True
+841037161,LA MAISON DES PLUS PETITS,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+884298035,FERME ECOLE GRAINES D'AVENIR,9220,medico_social,association_fondation,probable,ok,"lookup_sirene,get_permis",False
+495286098,RESIDENCES SOCIALES DE FRANCE,5546,bailleur_social,bailleur_social,probable,ok,"lookup_sirene,get_permis",True
+086180387,VALLOIRE HABITAT,5546,bailleur_social,bailleur_social,probable,ok,"lookup_sirene,get_permis",True
+367500899,LOGEO SEINE,5646,bailleur_social,bailleur_social,probable,ok,"lookup_sirene,get_permis",True
+602049199,AXIMO,5546,bailleur_social,bailleur_social,probable,ok,"lookup_sirene,get_permis",True
+578208878,DOMEFI,5547,bailleur_social,bailleur_social,probable,ok,"lookup_sirene,get_permis",True
+582088662,COOPERATION ET FAMILLE,5646,bailleur_social,bailleur_social,probable,ok,"lookup_sirene,get_permis",True
+335581211,LE FOYER REMOIS,5646,bailleur_social,bailleur_social,probable,ok,"lookup_sirene,get_permis",True
