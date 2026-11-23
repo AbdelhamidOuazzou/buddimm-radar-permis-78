@@ -124,7 +124,8 @@ def test_appliquer_agent_ne_remplace_que_les_cas_non_tranches(tmp_path):
 RES = Path("results")
 
 
-@pytest.mark.skipif(not (RES / "echeances.csv").exists(), reason="lancer patterns.py")
+@pytest.mark.skipif(not ((RES / "echeances.csv").exists() and Path("data/processed/permis_78.csv").exists()),
+                    reason="lancer load_data.py, les filtres puis patterns.py")
 def test_sorties_reelles_tracables():
     permis = pd.read_csv("data/processed/permis_78.csv", dtype=str)
     connus = set(permis["NUM_DAU"])

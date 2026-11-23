@@ -1,7 +1,20 @@
 # Radar des demandeurs de permis de construire (Yvelines) — cas métier Buddimm, sujet Sitadel
 
+[![tests](https://github.com/AbdelhamidOuazzou/buddimm-radar-permis-78/actions/workflows/tests.yml/badge.svg)](https://github.com/AbdelhamidOuazzou/buddimm-radar-permis-78/actions/workflows/tests.yml)
+
 Prototype réalisé pour le cas métier « qualification des permis de construire (Sitadel) » du stage
 « IA agentique et développement web » (Buddimm). **Ce n'est pas un produit fini.**
+
+**→ Démo interactive : https://abdelhamidouazzou.github.io/buddimm-radar-permis-78/** (carte, structures cibles
+filtrables avec leurs fiches, échéances, évaluation de l'agent) · **Note de deux pages :** [`Note_cas_metier_Sitadel.pdf`](Note_cas_metier_Sitadel.pdf)
+
+**En bref**
+- Sur 68 permis de résidences pour personnes âgées, handicapées ou sociales dans les Yvelines, **4 seulement** sont
+  déposés par une association ou une fondation : l'essentiel passe par des bailleurs et des promoteurs.
+- **84 structures cibles** (bailleurs sociaux, médico-social, ESS) identifiées avec preuve et source, dont 42 qui
+  déposent des permis chaque année ou presque, et **18 permis** proches de la fin de validité sans chantier déclaré.
+- Un **agent IA encadré** (outils, preuves vérifiées par le code, jamais « sûr ») trouve 3 cibles que les règles
+  ratent ; son évaluation est publiée telle quelle, y compris une première mesure fausse, détectée et corrigée.
 
 **Question traitée** : dans les permis de construire de logements et de locaux des Yvelines (78) déposés
 par des personnes morales, *qui est le demandeur* (famille), et lesquels ressemblent aux clients de
@@ -155,6 +168,7 @@ python filter3.py --dry-run          # voir qui serait envoyé à l'agent
 python filter3.py --max 20           # lancer l'agent (reprend là où il s'est arrêté)
 python evaluate.py                   # évaluer l'agent sans FINESS
 python patterns.py                   # patterns + fiches dans results/
+python build_site.py                 # données de la démo (docs/data.js), puis ouvrir docs/index.html
 python -m pytest -q                  # tests
 ```
 
@@ -170,6 +184,8 @@ L'agent utilise une API compatible OpenAI (`OPENAI_BASE_URL`, `OPENAI_API_KEY`, 
 | `filter3.py`, `tools.py` | agent, outils, garde-fou |
 | `evaluate.py` | évaluation sans FINESS |
 | `patterns.py` | clients réguliers, projets sociaux, échéances, fiches prospects |
+| `build_site.py`, `docs/` | démo web statique (HTML/JS sans dépendance, carte SVG à partir de l'API Géo), publiée sur GitHub Pages |
+| `.github/workflows/tests.yml` | intégration continue : les tests tournent à chaque push (sans les données, les contrôles qui en dépendent sont ignorés) |
 | `test_filters.py`, `test_agent.py`, `test_patterns.py` | 53 tests (règles, FINESS, outils, garde-fou, patterns, cohérence des données, audit des décisions) |
 | `ref/` | nomenclatures officielles INSEE |
 | `results/` | évaluations et décisions de l'agent, patterns et fiches |

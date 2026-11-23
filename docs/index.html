@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Radar des permis — Yvelines</title>
+<meta name="description" content="Qui dépose les permis de construire dans les Yvelines, et lesquels intéressent un acteur de l'immobilier médico-social : démo d'un prototype (Sitadel, FINESS, agent IA encadré).">
+<style>
+:root {
+  color-scheme: light;
+  --page: #f9f9f7; --surface-1: #fcfcfb; --surface-2: #f3f2ee;
+  --ink: #0b0b0b; --ink-2: #52514e; --muted: #898781;
+  --grid: #e1e0d9; --axis: #c3c2b7; --border: rgba(11,11,11,0.10);
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a;
+  --ramp-1: #86b6ef; --ramp-2: #3987e5; --ramp-3: #1c5cab;
+  --rest: #e1e0d9; --map-fill: #efeee9; --map-line: #d6d5cd;
+  --accent: #256abf; --warn-ink: #8a5a00; --good-ink: #006300;
+  --chip: #eef3fb; --chip-ink: #1c5cab;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface-1: #1a1a19; --surface-2: #232321;
+    --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+    --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+    --ramp-1: #184f95; --ramp-2: #256abf; --ramp-3: #5598e7;
+    --rest: #2c2c2a; --map-fill: #242422; --map-line: #3a3a37;
+    --accent: #6da7ec; --warn-ink: #fab219; --good-ink: #0ca30c;
+    --chip: #1c2a3d; --chip-ink: #9ec5f4;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page: #0d0d0d; --surface-1: #1a1a19; --surface-2: #232321;
+  --ink: #f0efec; --ink-2: #c3c2b7; --muted: #898781;
+  --grid: #2c2c2a; --axis: #383835; --border: rgba(255,255,255,0.10);
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70;
+  --ramp-1: #184f95; --ramp-2: #256abf; --ramp-3: #5598e7;
+  --rest: #2c2c2a; --map-fill: #242422; --map-line: #3a3a37;
+  --accent: #6da7ec; --warn-ink: #fab219; --good-ink: #0ca30c;
+  --chip: #1c2a3d; --chip-ink: #9ec5f4;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--page); color: var(--ink);
+  font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+a { color: var(--accent); }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+header.hero { padding: 48px 0 24px; }
+.eyebrow { color: var(--ink-2); font-size: 13px; letter-spacing: .02em; margin: 0 0 8px; }
+h1 { font-size: clamp(28px, 4.4vw, 42px); line-height: 1.12; margin: 0 0 14px; letter-spacing: -0.01em; max-width: 22ch; }
+.lede { font-size: 17px; color: var(--ink-2); max-width: 64ch; margin: 0 0 18px; }
+.links { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface-1); color: var(--ink); text-decoration: none; font-size: 14px; }
+.btn.primary { background: var(--accent); color: #fff; border-color: transparent; }
+section { margin: 0 0 22px; background: var(--surface-1); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+section > h2 { font-size: 20px; margin: 0 0 4px; letter-spacing: -0.005em; }
+.sub { color: var(--ink-2); margin: 0 0 16px; max-width: 70ch; }
+.kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin: 0 0 22px; }
+.kpi { background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; }
+.kpi b { display: block; font-size: 28px; line-height: 1.15; font-weight: 650; }
+.kpi span { color: var(--ink-2); font-size: 13px; }
+.insight { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; margin: 0 0 16px; font-size: 16px; max-width: 72ch; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; align-items: start; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--ink-2); margin: 4px 0 10px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.legend i.sq { border-radius: 3px; }
+svg text { fill: var(--ink-2); font-size: 12px; }
+.note { color: var(--muted); font-size: 13px; margin: 10px 0 0; }
+.tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 0 0 12px; }
+input[type=search], select { font: inherit; font-size: 14px; padding: 7px 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--surface-1); color: var(--ink); }
+input[type=search] { min-width: 220px; flex: 1 1 220px; }
+label.chk { font-size: 14px; color: var(--ink-2); display: inline-flex; gap: 6px; align-items: center; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+th { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; white-space: nowrap; }
+th.sort { cursor: pointer; user-select: none; }
+th.sort:hover { color: var(--ink); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+tr.row { cursor: pointer; }
+tr.row:hover td { background: var(--surface-2); }
+tr.row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.chip { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px; background: var(--chip); color: var(--chip-ink); margin: 2px 4px 2px 0; white-space: nowrap; }
+.chip.muted { background: var(--surface-2); color: var(--ink-2); }
+.sig { font-size: 12px; white-space: nowrap; margin-right: 8px; color: var(--ink-2); }
+.sig.on { color: var(--ink); font-weight: 600; }
+.detail td { background: var(--surface-2); padding: 14px 16px 18px; }
+.detail table { font-size: 13px; background: var(--surface-1); border-radius: 8px; }
+.detail p { margin: 0 0 8px; }
+.name { font-weight: 600; }
+.small { font-size: 12px; color: var(--muted); }
+.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; }
+.steps li { counter-increment: s; position: relative; padding: 0 0 14px 40px; }
+.steps li::before { content: counter(s); position: absolute; left: 0; top: 0; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--chip); color: var(--chip-ink); font-weight: 650; font-size: 13px; display: grid; place-items: center; }
+.steps b { display: block; }
+.cols3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.cols3 h3 { font-size: 15px; margin: 0 0 6px; }
+.cols3 ul { margin: 0; padding-left: 18px; color: var(--ink-2); font-size: 14px; }
+details summary { cursor: pointer; color: var(--accent); font-size: 14px; margin-top: 10px; }
+#tip { position: fixed; pointer-events: none; z-index: 10; max-width: 280px; background: var(--surface-1); color: var(--ink);
+  border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px; font-size: 13px; line-height: 1.4;
+  box-shadow: 0 6px 24px rgba(0,0,0,.14); opacity: 0; transition: opacity .08s; }
+#tip b { display: block; }
+footer { color: var(--ink-2); font-size: 13px; padding: 8px 0 48px; }
+footer ul { padding-left: 18px; margin: 6px 0; }
+@media (max-width: 820px) {
+  .kpis { grid-template-columns: repeat(2, 1fr); }
+  .grid2, .cols3 { grid-template-columns: 1fr; }
+  section { padding: 16px; }
+  .hide-sm { display: none; }
+}
+</style>
+</head>
+<body>
+<header class="hero wrap">
+  <p class="eyebrow">Prototype · cas métier Sitadel · stage « IA agentique et développement web » 2027</p>
+  <h1>Qui construit dans les Yvelines, et qui intéresse l'immobilier médico&#8209;social&nbsp;?</h1>
+  <p class="lede">Les permis de construire déposés par des personnes morales, qualifiés par un entonnoir
+    règles → FINESS → agent IA encadré, puis transformés en signaux de prospection. Données publiques uniquement,
+    chaque résultat renvoie à sa source.</p>
+  <div class="links">
+    <a class="btn primary" href="https://github.com/AbdelhamidOuazzou/buddimm-radar-permis-78">Code et résultats (GitHub)</a>
+    <a class="btn" href="https://github.com/AbdelhamidOuazzou/buddimm-radar-permis-78/blob/main/Note_cas_metier_Sitadel.pdf">Note de deux pages (PDF)</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="kpis" id="kpis"></div>
+
+  <section id="qualif">
+    <h2>1. Qualifier les demandeurs, sans deviner</h2>
+    <p class="sub">Sitadel dit <em>qui</em> dépose un permis, pas <em>ce qu'il est</em>. Chaque demandeur passe dans
+      trois filtres, du plus sûr au plus incertain. Quand rien ne permet de trancher, il reste « non déterminé ».</p>
+    <div id="funnel"></div>
+    <p class="note" id="funnel-note"></p>
+  </section>
+
+  <section id="projets">
+    <h2>2. Les projets médico-sociaux sont surtout portés par d'autres que les associations</h2>
+    <p class="insight" id="projets-insight"></p>
+    <div class="grid2">
+      <div>
+        <p class="sub" style="margin-bottom:8px">Qui a déposé les permis de résidences pour personnes âgées, handicapées
+          ou à vocation sociale ?</p>
+        <div id="bars-projets"></div>
+        <p class="note">Le demandeur n'est pas forcément l'exploitant : un promoteur peut construire une résidence
+          qu'une association gérera. Ces projets sont des pistes à creuser, pas des clients confirmés.</p>
+      </div>
+      <div>
+        <div class="legend" id="map-legend"></div>
+        <div id="map"></div>
+        <p class="note">Un point par permis, placé sur sa commune ; taille selon le nombre de logements.</p>
+      </div>
+    </div>
+    <details>
+      <summary>Voir la liste des permis</summary>
+      <div class="tablewrap"><table id="tbl-projets"></table></div>
+    </details>
+  </section>
+
+  <section id="prospects">
+    <h2>3. Les structures cibles et leurs signaux</h2>
+    <p class="sub">Bailleurs sociaux, structures médico-sociales et ESS identifiés dans les permis. Le score additionne
+      des signaux explicables : dépôts réguliers (+2), permis proche de l'échéance sans chantier (+2), projet de
+      résidence sociale ou médico-sociale (+1), famille établie de façon sûre (+1). Cliquer une ligne ouvre sa fiche.</p>
+    <div class="tools">
+      <input type="search" id="q" placeholder="Rechercher une structure ou une commune" aria-label="Rechercher">
+      <select id="fam" aria-label="Famille">
+        <option value="">Toutes les familles</option>
+        <option value="bailleur_social">Bailleurs sociaux</option>
+        <option value="medico_social">Social et médico-social</option>
+        <option value="ess_autre">Autre ESS</option>
+      </select>
+      <label class="chk"><input type="checkbox" id="only-reg"> Réguliers seulement</label>
+      <label class="chk"><input type="checkbox" id="only-ech"> Avec échéance</label>
+      <span class="small" id="count"></span>
+    </div>
+    <div class="tablewrap"><table id="tbl-cibles"></table></div>
+  </section>
+
+  <section id="echeances">
+    <h2>4. Des projets peut-être à l'arrêt</h2>
+    <p class="sub" id="ech-sub"></p>
+    <div class="tablewrap"><table id="tbl-ech"></table></div>
+    <p class="note">Validité : art. R*424-17 du code de l'urbanisme (3 ans), portée à 5 ans pour les permis délivrés entre
+      le 28/05/2022 et le 28/05/2024 (décret n° 2025-461). Approximations : date d'autorisation au lieu de la notification,
+      prorogations et recours ignorés, ≈ 15 % des ouvertures de chantier jamais déclarées. Signal à vérifier, pas une certitude.</p>
+  </section>
+
+  <section id="agent">
+    <h2>5. Un agent IA utile, parce qu'il est encadré</h2>
+    <div class="grid2">
+      <div>
+        <ol class="steps">
+          <li><b>Il n'arrive qu'en dernier.</b>Les règles et FINESS traitent d'abord ce qui est certain ; l'agent ne voit que les cas ambigus.</li>
+          <li><b>Trois outils, un seul demandeur.</b>Ses permis, sa fiche Sirène (avec libellés officiels INSEE), FINESS. Il ne peut interroger aucun autre SIREN.</li>
+          <li><b>Chaque preuve est vérifiée par le code.</b>Une preuve citée doit figurer mot pour mot dans la réponse d'un outil ; sinon elle est écartée, et sans preuve le demandeur reste « non déterminé ».</li>
+          <li><b>Jamais « sûr ».</b>Cette confiance est réservée aux règles et à FINESS ; l'agent répond « probable » ou « à vérifier ».</li>
+        </ol>
+        <p class="sub" id="agent-run"></p>
+      </div>
+      <div>
+        <p class="sub" style="margin-bottom:8px">Évaluation sans l'outil FINESS : sur 33 structures que FINESS confirme
+          médico-sociales, combien l'agent en retrouve-t-il ?</p>
+        <div id="bars-eval"></div>
+        <p class="note">Le premier score était faux : un indicateur de Sirène issu de FINESS laissait passer la réponse.
+          Fuite corrigée, puis libellés officiels ajoutés. Le 67 % est mesuré sur les cas qui ont servi à corriger :
+          il est optimiste. Les 7 bailleurs sociaux témoins sont retrouvés à chaque version.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="limites">
+    <h2>6. Ce qui est établi, fragile ou manquant</h2>
+    <div class="cols3">
+      <div><h3>Établi</h3><ul id="l-etabli"></ul></div>
+      <div><h3>Fragile</h3><ul>
+        <li>Mesure de l'agent : 40 cas, rappel seulement, pas les fausses alertes.</li>
+        <li>Sens des codes d'état du permis déduit des données.</li>
+        <li>Seuils (3 permis, 3 années, 12 mois) choisis, pas normés.</li>
+        <li>« Médico-social » englobe aussi le social.</li>
+      </ul></div>
+      <div><h3>Manque</h3><ul id="l-manque"></ul></div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p><b>Sources</b> (publiques, primaires) :</p>
+  <ul>
+    <li>Sitadel, liste des autorisations d'urbanisme — SDES, API DiDo (<span id="f-mill"></span>)</li>
+    <li>FINESS, extraction des établissements — ministère des Solidarités et de la Santé, data.gouv.fr (mai 2026)</li>
+    <li>Sirène via l'API Recherche d'entreprises (api.gouv.fr) ; nomenclatures INSEE (catégories juridiques, NAF rév. 2)</li>
+    <li>Code de l'urbanisme, art. R*424-17, et décret n° 2025-461 — Légifrance ; contours des communes — API Géo</li>
+  </ul>
+  <p>Personnes morales uniquement : aucun nom de personne physique n'est collecté ; aucune prise de contact avec les demandeurs.
+    Données chargées le <span id="f-date"></span>.</p>
+</footer>
+<div id="tip" role="tooltip"></div>
+
+<script src="data.js"></script>
+<script>
+(() => {
+  const D = window.DATA;
+  const nf = new Intl.NumberFormat("fr-FR");
+  const n = v => nf.format(v);
+  const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const FAM = { bailleur_social: "Bailleur social", medico_social: "Social / médico-social", ess_autre: "Autre ESS" };
+  const GROUPES = [
+    { key: "cible", label: "Structure cible (bailleur, médico-social)", color: "--s1" },
+    { key: "autre", label: "Promoteur ou autre société", color: "--s2" },
+    { key: "sci",   label: "SCI / SCCV", color: "--s3" },
+  ];
+  const fdate = s => s ? s.split("-").reverse().join("/") : "";
+
+  // ---------- tooltip
+  const tip = document.getElementById("tip");
+  function showTip(html, ev) {
+    tip.innerHTML = html; tip.style.opacity = 1;
+    const pad = 14, r = tip.getBoundingClientRect();
+    let x = ev.clientX + pad, y = ev.clientY + pad;
+    if (x + r.width > innerWidth - 8) x = ev.clientX - r.width - pad;
+    if (y + r.height > innerHeight - 8) y = ev.clientY - r.height - pad;
+    tip.style.left = x + "px"; tip.style.top = y + "px";
+  }
+  const hideTip = () => { tip.style.opacity = 0; };
+
+  // ---------- KPIs
+  const q = D.qualif, m = D.meta;
+  document.getElementById("kpis").innerHTML = [
+    [n(m.permis), "permis de construire (logements et locaux) depuis 2013"],
+    [n(m.demandeurs), "personnes morales demandeuses"],
+    [n(q.total), `demandeurs qualifiés de façon traçable (${Math.round(100 * q.total / m.demandeurs)} %)`],
+    [n(q.cibles), "structures cibles : bailleurs sociaux, médico-social, ESS"],
+  ].map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join("");
+
+  // ---------- entonnoir (barre segmentée, part du tout)
+  (function funnel() {
+    const segs = [
+      { v: q.regles, label: "Règles (forme juridique INSEE)", c: "--ramp-1" },
+      { v: q.finess, label: "FINESS (établissements officiels)", c: "--ramp-2" },
+      { v: q.agent, label: "Agent IA (preuves vérifiées)", c: "--ramp-3" },
+      { v: m.demandeurs - q.total, label: "Pas encore qualifiés", c: "--rest" },
+    ];
+    const W = 1000, H = 46, gap = 2;
+    let x = 0;
+    const rects = segs.map((s, i) => {
+      const w = Math.max(W * s.v / m.demandeurs - (i < segs.length - 1 ? gap : 0), 2);
+      const r = `<rect class="seg" data-i="${i}" x="${x}" y="0" width="${w}" height="${H}" rx="4" fill="var(${s.c})"></rect>`;
+      x += W * s.v / m.demandeurs;
+      return r;
+    }).join("");
+    const legend = segs.map(s => `<span><i class="sq" style="background:var(${s.c})"></i>${s.label} : <b>${n(s.v)}</b></span>`).join("");
+    const el = document.getElementById("funnel");
+    el.innerHTML = `<div class="legend">${legend}</div>
+      <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Répartition des ${n(m.demandeurs)} demandeurs selon le filtre qui les a qualifiés">${rects}</svg>`;
+    el.querySelectorAll(".seg").forEach(r => {
+      const s = segs[+r.dataset.i];
+      r.addEventListener("mousemove", ev => showTip(`<b>${esc(s.label)}</b>${n(s.v)} demandeurs (${(100 * s.v / m.demandeurs).toFixed(1).replace(".", ",")} %)`, ev));
+      r.addEventListener("mouseleave", hideTip);
+    });
+    document.getElementById("funnel-note").innerHTML =
+      `Parmi les ${n(m.demandeurs - q.total)} pas encore qualifiés : ${n(q.sci)} SCI ou SCCV (on ne sait pas qui est derrière), ` +
+      `${n(q.asso)} associations hors champ ou d'activité inconnue, ${n(q.indetermine)} sans indice suffisant. ` +
+      `L'agent a examiné ${n(D.agent.traites)} demandeurs ; il a trouvé ${D.agent.nouvelles_cibles.length} cibles que les règles avaient manquées : ` +
+      D.agent.nouvelles_cibles.map(esc).join(", ") + ".";
+  })();
+
+  // ---------- projets sociaux : barres + carte
+  (function projets() {
+    const P = D.projets;
+    const asso = P.filter(p => p.asso).length;
+    const cnt = Object.fromEntries(GROUPES.map(g => [g.key, P.filter(p => p.groupe === g.key).length]));
+    document.getElementById("projets-insight").innerHTML =
+      `<b>${n(P.length)} permis</b> créent une résidence pour personnes âgées, handicapées ou à vocation sociale. ` +
+      `<b>${asso} seulement</b> sont déposés par une association ou une fondation. Un ciblage « associations » raterait l'essentiel de ces projets.`;
+
+    // barres horizontales
+    const W = 460, rowH = 40, labW = 0, H = GROUPES.length * rowH;
+    const max = Math.max(...Object.values(cnt));
+    const bars = GROUPES.map((g, i) => {
+      const w = (W - 40) * cnt[g.key] / max, y = i * rowH;
+      return `<g class="bar" data-i="${i}">
+        <rect x="0" y="${y}" width="${W}" height="${rowH}" fill="transparent"></rect>
+        <text x="0" y="${y + 13}" style="fill:var(--ink)">${esc(g.label)}</text>
+        <rect x="0" y="${y + 19}" width="${w}" height="14" rx="4" fill="var(${g.color})"></rect>
+        <text x="${w + 6}" y="${y + 31}" style="fill:var(--ink);font-weight:600">${cnt[g.key]}</text></g>`;
+    }).join("");
+    const bEl = document.getElementById("bars-projets");
+    bEl.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Permis de résidences sociales par type de demandeur">${bars}</svg>`;
+    bEl.querySelectorAll(".bar").forEach(b => {
+      const g = GROUPES[+b.dataset.i];
+      const ex = [...new Set(P.filter(p => p.groupe === g.key).map(p => p.demandeur))].slice(0, 4).map(esc).join(", ");
+      b.addEventListener("mousemove", ev => showTip(`<b>${esc(g.label)}</b>${cnt[g.key]} permis · ex. ${ex}`, ev));
+      b.addEventListener("mouseleave", hideTip);
+    });
+
+    // carte
+    const C = D.carte;
+    document.getElementById("map-legend").innerHTML = GROUPES.map(g =>
+      `<span><i style="background:var(${g.color})"></i>${esc(g.label)} (${cnt[g.key]})</span>`).join("");
+    const paths = Object.entries(C.communes).map(([code, c]) =>
+      `<path d="${c.d}" fill="var(--map-fill)" stroke="var(--map-line)" stroke-width="1"></path>`).join("");
+    const parCommune = {};
+    const dots = [...P].sort((a, b) => b.lgt - a.lgt).map(p => {
+      const c = C.communes[p.comm]; if (!c) return "";
+      const k = parCommune[p.comm] = (parCommune[p.comm] || 0) + 1;
+      const a = k * 2.4, d = k === 1 ? 0 : 9 * Math.sqrt(k);  // spirale si plusieurs permis dans une commune
+      const x = c.c[0] + d * Math.cos(a), y = c.c[1] + d * Math.sin(a);
+      const r = Math.max(5, Math.min(20, 2.2 * Math.sqrt(p.lgt || 1)));
+      const g = GROUPES.find(g => g.key === p.groupe);
+      return `<circle class="dot" data-num="${esc(p.num)}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}"
+        fill="var(${g.color})" stroke="var(--surface-1)" stroke-width="2" fill-opacity=".9"></circle>`;
+    }).join("");
+    // quelques communes repères, pour s'orienter
+    const reperes = ["78646", "78361", "78517", "78551", "78498", "78440", "78621"].filter(c => C.communes[c]).map(c => {
+      const cc = C.communes[c];
+      return `<text x="${cc.c[0]}" y="${cc.c[1] - 14}" text-anchor="middle" style="font-size:22px;fill:var(--muted);paint-order:stroke;stroke:var(--surface-1);stroke-width:5px;stroke-linejoin:round">${esc(cc.nom)}</text>`;
+    }).join("");
+    const mEl = document.getElementById("map");
+    mEl.innerHTML = `<svg viewBox="0 0 ${C.w} ${C.h}" width="100%" role="img" aria-label="Carte des Yvelines : permis de résidences sociales, seniors ou handicap">${paths}${dots}${reperes}</svg>`;
+    const byNum = Object.fromEntries(P.map(p => [p.num, p]));
+    mEl.querySelectorAll(".dot").forEach(d => {
+      const p = byNum[d.dataset.num];
+      d.addEventListener("mousemove", ev => showTip(`<b>${esc(p.demandeur)}</b>${esc(p.commune)} · résidence ${esc(p.type)}<br>${n(p.lgt)} logements · autorisé le ${fdate(p.date)}<br><span class="small">Permis ${esc(p.num)}</span>`, ev));
+      d.addEventListener("mouseleave", hideTip);
+    });
+
+    // table (relais d'accessibilité de la carte)
+    document.getElementById("tbl-projets").innerHTML =
+      `<thead><tr><th>Autorisé le</th><th>Commune</th><th>Résidence</th><th class="num">Logements</th><th>Demandeur</th><th>Type de demandeur</th><th class="hide-sm">Permis</th></tr></thead><tbody>` +
+      P.map(p => `<tr><td>${fdate(p.date)}</td><td>${esc(p.commune)}</td><td>${esc(p.type)}</td><td class="num">${n(p.lgt)}</td>
+        <td>${esc(p.demandeur)}</td><td>${esc(GROUPES.find(g => g.key === p.groupe).label)}${p.asso ? " · association/fondation" : ""}</td>
+        <td class="hide-sm small">${esc(p.num)}</td></tr>`).join("") + "</tbody>";
+  })();
+
+  // ---------- table des cibles
+  (function cibles() {
+    const T = document.getElementById("tbl-cibles");
+    const st = { q: "", fam: "", reg: false, ech: false, sort: "score", dir: -1, open: null };
+    const cols = [
+      { k: "nom", t: "Structure" }, { k: "methode", t: "Qualifiée par", cls: "hide-sm" },
+      { k: "nb_permis", t: "Permis", num: true }, { k: "lls", t: "Logts sociaux", num: true, cls: "hide-sm" },
+      { k: "sig", t: "Signaux", nosort: true }, { k: "score", t: "Score", num: true },
+    ];
+    function sigs(c) {
+      return `<span class="sig ${c.regulier ? "on" : ""}">${c.regulier ? "✓" : "–"} régulier</span>` +
+        `<span class="sig ${c.projets ? "on" : ""}">${c.projets ? "✓" : "–"} résidence</span>` +
+        `<span class="sig ${c.echeances ? "on" : ""}">${c.echeances ? "✓ échéance " + fdate(c.echeance_min) : "– échéance"}</span>`;
+    }
+    function fiche(c) {
+      const rows = c.permis.slice(0, 12).map(p => `<tr><td>${fdate(p.date)}</td><td>${esc(p.commune)}</td>
+        <td class="num">${n(p.lgt)}</td><td class="num">${n(p.lls)}</td><td>${esc(p.res || "—")}</td><td class="small">${esc(p.num)}</td></tr>`).join("");
+      return `<p><b>SIREN ${esc(c.siren)}</b> · ${esc(FAM[c.famille] || c.famille)} · confiance « ${esc(c.confiance)} » · qualifiée par ${esc(c.methode)}</p>
+        <p class="small">Preuve : ${esc(c.preuve)}</p>
+        <div class="tablewrap"><table><thead><tr><th>Autorisé le</th><th>Commune</th><th class="num">Logements</th><th class="num">dont sociaux</th><th>Résidence</th><th>Permis Sitadel</th></tr></thead>
+        <tbody>${rows}</tbody></table></div>
+        ${c.permis.length > 12 ? `<p class="small">… et ${c.permis.length - 12} autres permis.</p>` : ""}
+        <p class="small">À vérifier avant toute démarche : le demandeur n'est pas forcément l'exploitant ; un chantier peut avoir commencé sans être déclaré.</p>`;
+    }
+    function render() {
+      const qq = st.q.toLowerCase();
+      let L = D.cibles.filter(c => (!st.fam || c.famille === st.fam) && (!st.reg || c.regulier) && (!st.ech || c.echeances)
+        && (!qq || c.nom.toLowerCase().includes(qq) || c.permis.some(p => String(p.commune).toLowerCase().includes(qq))));
+      L.sort((a, b) => {
+        const va = a[st.sort], vb = b[st.sort];
+        const r = typeof va === "number" ? va - vb : String(va).localeCompare(String(vb), "fr");
+        return st.dir * r || (b.nb_permis - a.nb_permis);
+      });
+      document.getElementById("count").textContent = `${L.length} structure${L.length > 1 ? "s" : ""} sur ${D.cibles.length}`;
+      T.innerHTML = `<thead><tr>${cols.map(c => `<th class="${c.num ? "num " : ""}${c.nosort ? "" : "sort "}${c.cls || ""}" data-k="${c.k}">${c.t}${st.sort === c.k ? (st.dir < 0 ? " ↓" : " ↑") : ""}</th>`).join("")}</tr></thead><tbody>` +
+        L.map(c => `<tr class="row" tabindex="0" data-s="${c.siren}" aria-expanded="${st.open === c.siren}">
+          <td><span class="name">${esc(c.nom)}</span><br><span class="chip ${c.famille === "bailleur_social" ? "" : "muted"}">${esc(FAM[c.famille] || c.famille)}</span></td>
+          <td class="hide-sm">${esc(c.methode)}</td><td class="num">${n(c.nb_permis)}</td><td class="num hide-sm">${n(c.lls)}</td>
+          <td>${sigs(c)}</td><td class="num"><b>${c.score}</b></td></tr>` +
+          (st.open === c.siren ? `<tr class="detail"><td colspan="${cols.length}">${fiche(c)}</td></tr>` : "")).join("") + "</tbody>";
+      T.querySelectorAll("th.sort").forEach(th => th.onclick = () => {
+        st.dir = st.sort === th.dataset.k ? -st.dir : (th.dataset.k === "nom" || th.dataset.k === "methode" ? 1 : -1);
+        st.sort = th.dataset.k; render();
+      });
+      T.querySelectorAll("tr.row").forEach(tr => {
+        const tog = () => { st.open = st.open === tr.dataset.s ? null : tr.dataset.s; render(); };
+        tr.onclick = tog; tr.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tog(); } };
+      });
+    }
+    document.getElementById("q").oninput = e => { st.q = e.target.value; render(); };
+    document.getElementById("fam").onchange = e => { st.fam = e.target.value; render(); };
+    document.getElementById("only-reg").onchange = e => { st.reg = e.target.checked; render(); };
+    document.getElementById("only-ech").onchange = e => { st.ech = e.target.checked; render(); };
+    render();
+  })();
+
+  // ---------- échéances
+  (function ech() {
+    const E = D.echeances;
+    document.getElementById("ech-sub").innerHTML =
+      `<b>${E.length} permis</b> de structures cibles ou de résidences sociales sont autorisés sans aucune déclaration de chantier ` +
+      `et atteignent la fin de leur validité théorique dans les 12 mois. Un projet qui ne démarre pas a peut-être besoin d'aide.`;
+    document.getElementById("tbl-ech").innerHTML =
+      `<thead><tr><th>Fin de validité</th><th>Demandeur</th><th>Commune</th><th class="num">Logements</th><th class="hide-sm">Règle</th><th class="hide-sm">Autorisé le</th></tr></thead><tbody>` +
+      E.map(e => `<tr><td><b>${fdate(e.fin)}</b></td><td>${esc(e.demandeur)}${e.famille ? `<br><span class="chip muted">${esc(FAM[e.famille] || e.famille)}</span>` : ""}</td>
+        <td>${esc(e.commune)}</td><td class="num">${n(e.lgt)}</td><td class="hide-sm small">${esc(e.regle)}</td><td class="hide-sm">${fdate(e.aut)}</td></tr>`).join("") + "</tbody>";
+  })();
+
+  // ---------- évaluation de l'agent
+  (function evalAgent() {
+    const E = D.evals;
+    const rows = [
+      { k: "fuite", label: "1re mesure — invalide (fuite de FINESS)", c: "--muted", hatch: true },
+      { k: "sans_naf", label: "Fuite corrigée", c: "--s1" },
+      { k: "final", label: "+ libellés officiels INSEE", c: "--s1" },
+    ];
+    const W = 460, rowH = 44, H = rows.length * rowH + 18, N = E.final.medico_n;
+    const grid = [0, 11, 22, 33].map(t => `<line x1="${(W - 50) * t / N}" x2="${(W - 50) * t / N}" y1="0" y2="${H - 18}" stroke="var(--grid)"></line>
+      <text x="${(W - 50) * t / N}" y="${H - 4}" text-anchor="${t ? "middle" : "start"}" style="font-variant-numeric:tabular-nums">${t}</text>`).join("");
+    const bars = rows.map((r, i) => {
+      const v = E[r.k].medico, w = (W - 50) * v / N, y = i * rowH;
+      return `<text x="0" y="${y + 13}" style="fill:var(--ink)">${r.label}</text>
+        <rect x="0" y="${y + 19}" width="${w}" height="14" rx="4" fill="var(${r.c})" ${r.hatch ? 'fill-opacity=".6"' : ""}></rect>
+        <text x="${w + 6}" y="${y + 31}" style="fill:var(--ink);font-weight:600">${v} / ${N}${r.hatch ? " (faux)" : ""}</text>`;
+    }).join("");
+    document.getElementById("bars-eval").innerHTML =
+      `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Évaluation de l'agent : ${E.fuite.medico}, puis ${E.sans_naf.medico}, puis ${E.final.medico} sur ${N}">${grid}${bars}</svg>`;
+    const A = D.agent, F = A.familles;
+    document.getElementById("agent-run").innerHTML =
+      `Passage sur les ${n(A.traites)} demandeurs ambigus les plus prometteurs : ${n(F.association_fondation || 0)} associations hors champ, ` +
+      `${n(F.autre || 0)} promoteurs ou entreprises, ${n(F.societe_civile_immo || 0)} SCI/SCCV sans plus d'information, ` +
+      `et ${A.nouvelles_cibles.length} nouvelles cibles. Preuves rejetées par le garde-fou : ${A.rejetees}.`;
+  })();
+
+  // ---------- limites, pied de page
+  document.getElementById("l-etabli").innerHTML = [
+    `${n(q.total)} demandeurs qualifiés, chacun avec sa preuve et sa source.`,
+    "Résultats reproductibles ; 53 tests, dont un audit qui rejoue chaque décision de l'agent.",
+    "Aucune donnée de personne physique.",
+  ].map(s => `<li>${s}</li>`).join("");
+  document.getElementById("l-manque").innerHTML = [
+    `${n(q.indetermine + q.sci)} demandeurs restent opaques, dont ${n(q.sci)} SCI/SCCV.`,
+    "L'exploitant futur des résidences n'est pas dans la base.",
+    "Pas encore de lien avec les appels à projets médico-sociaux.",
+  ].map(s => `<li>${s}</li>`).join("");
+  document.getElementById("f-mill").textContent = "millésime " + m.millesime;
+  document.getElementById("f-date").textContent = fdate(m.date);
+})();
+</script>
+</body>
+</html>
