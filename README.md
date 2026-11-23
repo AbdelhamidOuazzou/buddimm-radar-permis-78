@@ -180,4 +180,4 @@ avec les demandeurs.
 - Assistant de code : **Claude (Claude Code)** pour la conception et l'écriture du code, revue par l'auteur.
 - Modèle de l'agent : `azure_ai/gpt-5.4`, via le proxy compatible OpenAI d'un établissement universitaire.
 - Python, pandas, requests, openai, pytest.
-- Temps passé : *à compléter par l'auteur (heures réelles).*
+- Temps passé : 10 heures.

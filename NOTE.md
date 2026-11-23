@@ -57,5 +57,5 @@ Chaque mois, le nouveau millésime Sitadel repasserait dans l'entonnoir et produ
 
 Les fiches iraient à un chargé d'affaires qui valide avant tout contact. Ses retours (bon ou mauvais signal) serviraient à ajuster les règles et à mesurer l'agent.
 
-**Temps passé** : [à compléter] heures.
+**Temps passé** : 10 heures.
 **Outils** : Python (pandas, requests, pytest). Modèle de l'agent : gpt-5.4, via le proxy compatible OpenAI d'un établissement universitaire. Assistant Claude Code pour écrire le code et rédiger une première version de cette note.
