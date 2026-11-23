@@ -29,6 +29,7 @@ Buddimm (structures médico-sociales, ESS, bailleurs sociaux) ?
 | Nomenclatures INSEE : catégories juridiques (2022-09) et NAF rév. 2 | libellés officiels des codes (`ref/`) | — |
 | API « Recherche d'entreprises » (Sirène, api.gouv.fr) | activité et état d'un demandeur, pour l'agent | consultée à l'exécution |
 | Code de l'urbanisme, art. R*424-17, et décret n° 2025-461 du 26 mai 2025 (Légifrance) | durée de validité d'un permis | consultés le 22/11/2026 |
+| API Géo (geo.api.gouv.fr) : contours des communes des Yvelines | fond de carte de la démo | consultée le 23/11/2026 |
 
 Chaque ligne produite garde sa source (`source`, n° de permis, n° FINESS dans la colonne `preuve`).
 
