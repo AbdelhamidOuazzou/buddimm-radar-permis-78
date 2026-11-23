@@ -1,7 +1,7 @@
 # Qualifier les demandeurs de permis de construire des Yvelines — cas métier Sitadel
 
 Abdelhamid Ouazzou · Stage « IA agentique et développement web » 2027 · Novembre 2026
-Dépôt : https://github.com/AbdelhamidOuazzou/buddimm-radar-permis-78
+Démo interactive : https://abdelhamidouazzou.github.io/buddimm-radar-permis-78/ · Dépôt : https://github.com/AbdelhamidOuazzou/buddimm-radar-permis-78
 
 ## 1. L'angle choisi, et pourquoi
 
