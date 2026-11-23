@@ -157,7 +157,27 @@ Généré le 2026-11-22 à partir de Sitadel (millésime 2026-10) et FINESS. Auc
 
 **À vérifier avant toute démarche** : le demandeur du permis n'est pas forcément l'exploitant ; un chantier peut avoir commencé sans être déclaré (≈ 15 % des cas) ; prorogations et recours non connus.
 
-## 9. ANTIN RESIDENCES SA HABITAT LOYER MODERE (SIREN 315518803)
+## 9. IMMOBILIERE 3F (SIREN 552141533)
+
+- **Famille** : bailleur_social — confiance « probable » (méthode : agent)
+- **Preuve** : Agent (azure_ai/gpt-5.4) : lookup_sirene.activite_principale_libelle=Location de logements; get_permis.logements_locatifs_sociaux_total=1358; get_permis.nb_permis=48
+- **Score** : 4 — dépose des permis régulièrement (48 permis, années 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026); 2 permis autorisé(s) sans chantier déclaré, validité théorique échéant le 2027-07-29
+
+| Permis (Sitadel) | Autorisé le | Commune du terrain | Logements | dont sociaux | Résidence | État* |
+|---|---|---|---|---|---|---|
+| 0785172600005 | 2026-03-23 | RAMBOUILLET | 7 | 7 | — | 2 |
+| 0783112500034 | 2025-12-31 | HOUILLES | 0 | 0 | — | 2 |
+| 0783112500036 | 2025-12-31 | HOUILLES | 51 | 51 | — | 2 |
+| 07815824C0033 | 2025-12-22 | LE CHESNAY - ROCQUENCOURT | 28 | 28 | — | 2 |
+| 0786242500009 | 2025-09-23 | TRIEL-SUR-SEINE | 30 | 30 | — | 2 |
+| 07837224G0012 | 2025-07-28 | MARLY-LE-ROI | 21 | 21 | — | 2 |
+| 0786242400023 | 2025-05-12 | TRIEL-SUR-SEINE | 12 | 12 | — | 2 |
+| 07820824E0006 | 2024-07-29 | ELANCOURT | 0 | 0 | — | 2 |
+| … 40 autres permis | | | | | | |
+
+**À vérifier avant toute démarche** : le demandeur du permis n'est pas forcément l'exploitant ; un chantier peut avoir commencé sans être déclaré (≈ 15 % des cas) ; prorogations et recours non connus.
+
+## 10. ANTIN RESIDENCES SA HABITAT LOYER MODERE (SIREN 315518803)
 
 - **Famille** : bailleur_social — confiance « sur » (méthode : R04)
 - **Preuve** : CJ 5546 = SA de HLM à conseil d'administration (INSEE, nomenclature 2022-09)
@@ -174,26 +194,6 @@ Généré le 2026-11-22 à partir de Sitadel (millésime 2026-10) et FINESS. Auc
 | 07868821E0005 | 2021-09-09 | VOISINS-LE-BRETONNEUX | 30 | 0 | — | 6 |
 | 07868821E0007 | 2021-09-07 | VOISINS-LE-BRETONNEUX | 62 | 0 | — | 6 |
 | … 22 autres permis | | | | | | |
-
-**À vérifier avant toute démarche** : le demandeur du permis n'est pas forcément l'exploitant ; un chantier peut avoir commencé sans être déclaré (≈ 15 % des cas) ; prorogations et recours non connus.
-
-## 10. AVENIR APEI (SIREN 785039058)
-
-- **Famille** : medico_social — confiance « sur » (méthode : R20)
-- **Preuve** : CJ 9220 = Association déclarée (INSEE, nomenclature 2022-09) | FINESS: Etablissement et Service d'Aide par le Travail (E.S.A.T.) x4 (ex. FINESS 780170015); Etab.Accueil Non Médicalisé pour personnes handicapées x3 (ex. FINESS 780002648); Maison d'Accueil Spécialisée (M.A.S.) x3 (ex. FINESS 780002598
-- **Score** : 4 — dépose des permis régulièrement (10 permis, années 2016, 2018, 2020, 2022, 2024, 2025, 2026); 1 permis de résidence sociale / personnes âgées / handicap
-
-| Permis (Sitadel) | Autorisé le | Commune du terrain | Logements | dont sociaux | Résidence | État* |
-|---|---|---|---|---|---|---|
-| 07812625G0014 | 2026-03-09 | LA CELLE-SAINT-CLOUD | 0 | 0 | — | 2 |
-| 0784812500009 | 2025-11-10 | LE PECQ | 0 | 0 | — | 5 |
-| 07865025G0014 | 2025-09-17 | LE VESINET | 8 | 0 | handicap | 2 |
-| 07812624G0021 | 2024-11-29 | LA CELLE-SAINT-CLOUD | 0 | 0 | — | 2 |
-| 0781722200052 | 2022-11-17 | CONFLANS-SAINTE-HONORINE | 0 | 0 | — | 6 |
-| 07812420G0011 | 2020-12-10 | CARRIERES-SUR-SEINE | 0 | 0 | — | 5 |
-| 07812418G0011 | 2018-12-13 | CARRIERES-SUR-SEINE | 0 | 0 | — | 6 |
-| 07855117Z0078 | 2018-06-11 | SAINT-GERMAIN-EN-LAYE | 0 | 0 | — | 6 |
-| … 2 autres permis | | | | | | |
 
 **À vérifier avant toute démarche** : le demandeur du permis n'est pas forcément l'exploitant ; un chantier peut avoir commencé sans être déclaré (≈ 15 % des cas) ; prorogations et recours non connus.
 

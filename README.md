@@ -54,16 +54,17 @@ reste **« non déterminé »**.
 |---|---|
 | Filtre 1 (forme juridique) | 2 314 classés, **dont 1 721 SCI/SCCV seulement repérées** (on ne sait pas qui est derrière) |
 | Filtre 2 (FINESS) | 124 demandeurs retrouvés dans FINESS ; **33 associations/fondations confirmées sociales ou médico-sociales** (sûr), 7 sociétés (probable), 5 cliniques (probable) |
-| **Demandeurs réellement qualifiés (famille et activité connues)** | **497 sur 3 957 (13 %)** |
-| Reste | 1 721 SCI/SCCV, ~1 630 sans famille, 108 associations d'activité inconnue |
+| Demandeurs réellement qualifiés (famille et activité connues) après les règles et FINESS | 497 sur 3 957 (13 %) |
+| **Après l'agent (200 demandeurs examinés)** | **570 sur 3 957 (14 %)**, dont 84 structures cibles |
+| Reste | ~1 720 SCI/SCCV, ~1 560 sans famille, 106 associations hors champ ou d'activité inconnue |
 
 ### Patterns (`patterns.py`, sorties dans `results/`)
 
 | Pattern | Résultat | Fichier |
 |---|---|---|
-| **Clients réguliers** (≥ 3 permis sur ≥ 3 années) | 362 demandeurs réguliers, dont **39 structures cibles** (25 bailleurs sociaux, 14 médico-sociaux) | `prospects_reguliers.csv` |
+| **Clients réguliers** (≥ 3 permis sur ≥ 3 années) | 362 demandeurs réguliers, dont **42 structures cibles** (27 bailleurs sociaux, 14 médico-sociaux, 1 ESS) | `prospects_reguliers.csv` |
 | **Projets sociaux / médico-sociaux « cachés »** : permis de résidence pour personnes âgées, handicapées ou sociale | **68 permis (55 demandeurs), dont 4 seulement déposés par une association ou fondation** ; 39 par un demandeur qui n'est pas une structure cible : 23 classés « autre » par l'agent (dont 14 en « promotion immobilière de logements » d'après Sirène : Bouygues Immobilier, Eiffage, Linkcity, Altarea Cogedim… ; les autres surtout marchands de biens ou sociétés immobilières) et 16 SCI/SCCV | `projets_sociaux.csv` |
-| **Échéances** : permis autorisés, sans aucune déclaration de chantier, dont la validité théorique échoit dans les 12 mois | **16 permis** à vérifier | `echeances.csv` |
+| **Échéances** : permis autorisés, sans aucune déclaration de chantier, dont la validité théorique échoit dans les 12 mois | **18 permis** à vérifier | `echeances.csv` |
 | **Fiches prospects** : les 10 structures cibles au score le plus élevé, avec leurs permis sourcés | 10 fiches | `fiches_prospects.md` |
 
 Lecture métier : un filtre « associations seulement » raterait presque tous les projets de résidences
@@ -80,23 +81,28 @@ prorogations et recours ignorés ; ≈ 15 % des ouvertures de chantier ne sont j
 
 Sélection de 200 demandeurs non tranchés par les règles : d'abord ceux qui ont un permis de résidence
 sociale / seniors / handicap (39), puis les associations d'activité inconnue (108), puis les plus actifs.
-**L'agent en a traité 106** : le plafond de dépense fixé sur la clé API utilisée a été atteint avant la fin
-(`python filter3.py` reprend au demandeur suivant).
+**Les 200 ont été traités**, en deux passes (le plafond de dépense de la première clé API a été atteint
+après 106 demandeurs ; `filter3.py` a repris au suivant). Environ 486 000 tokens.
 
 | Décision de l'agent | Nombre |
 |---|---|
-| association_fondation (activité non médico-sociale ou inconnue : sport, culte, enseignement…) | 67 |
-| autre (essentiellement promotion immobilière, preuve : libellé NAF Sirène) | 22 |
-| societe_civile_immo (SCI/SCCV, rien de plus trouvé) | 16 |
-| sante | 1 |
+| association_fondation (activité non médico-sociale ou inconnue : sport, culte, enseignement…) | 106 |
+| autre (promotion immobilière, marchands de biens, entreprises… ; preuve : libellé NAF Sirène) | 68 |
+| societe_civile_immo (SCI/SCCV, rien de plus trouvé) | 21 |
+| bailleur_social | 2 |
+| sante | 2 |
+| ess_autre | 1 |
 
 Toutes les décisions ont au moins une preuve vérifiée ; **aucune preuve citée n'a été rejetée** par le garde-fou ;
-toutes sont « probable » (103) ou « à vérifier » (3). Détail : `results/decisions_agent.csv`.
+toutes sont « probable » (196) ou « à vérifier » (4). Détail : `results/decisions_agent.csv`.
 
-Ce que ça apprend : l'agent n'a trouvé **aucune nouvelle structure cible** parmi ces 106 demandeurs. Son
-apport ici est de *trier* : il écarte les associations hors champ et confirme que les projets de résidences
-« cachés » sont portés par des promoteurs — l'exploitant reste à identifier, ce que les sources utilisées ne
-permettent pas.
+Ce que ça apprend :
+- l'agent a trouvé **3 structures cibles que les règles avaient manquées**, parce que leur nom ne contient pas
+  « HLM » : **Immobilière 3F** (bailleur social, 48 permis, 1 358 logements locatifs sociaux),
+  **Logement Français** (bailleur social) et **Foncière d'Habitat et Humanisme** (ESS) ;
+- pour le reste, il *trie* : il écarte les associations hors champ et confirme que les projets de résidences
+  « cachés » sont portés par des promoteurs — l'exploitant reste à identifier, ce que les sources utilisées ne
+  permettent pas.
 
 ### Évaluation de l'agent, sans l'outil FINESS
 
@@ -127,8 +133,8 @@ des familles absurdes.
     (2 = aucune date de chantier, 5 = chantier ouvert, 6 = achevé, 4 = probablement annulé) ;
   - les seuils (3 permis, 3 années, 12 mois) sont des choix, pas des normes.
 - **Manque / non fait** :
-  - l'agent n'a traité que **106 des 200 demandeurs sélectionnés** (budget de la clé épuisé), et aucun des
-    ~3 250 autres demandeurs non tranchés : ils restent « non déterminés » ;
+  - l'agent a traité les 200 demandeurs sélectionnés, mais **aucun des ~3 260 autres** demandeurs non tranchés :
+    ils restent « non déterminés » ;
   - les SCCV ne sont pas rattachées à leur groupe (promoteur, bailleur) ;
   - pas de lien avec les appels à projets médico-sociaux (piste naturelle : une association autorisée après
     un appel à projets doit ensuite construire ou trouver des locaux).

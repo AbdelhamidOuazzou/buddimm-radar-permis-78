@@ -20,13 +20,13 @@ Ce choix réduit le coût, rend les résultats reproductibles et, surtout, perme
 Périmètre : 7 092 permis de construire (Sitadel, millésime d'octobre 2026) déposés par 3 957 personnes morales.
 
 - **Les projets médico-sociaux sont surtout portés par d'autres que les associations.** 68 permis créent une résidence pour personnes âgées, handicapées ou à vocation sociale. 4 seulement sont déposés par une association ou une fondation, 29 par des bailleurs sociaux ou des structures médico-sociales, et 39 par des promoteurs ou des SCI/SCCV. Pour 14 de ces 39 permis, la fiche Sirène indique « promotion immobilière de logements » (Bouygues Immobilier, Eiffage, Linkcity, Altarea Cogedim…), et 9 autres relèvent surtout de marchands de biens ou de sociétés immobilières. Un ciblage « associations » raterait donc l'essentiel de ces projets. La vraie question commerciale devient : **qui exploitera ces résidences ?**
-- **Des clients au besoin récurrent.** 39 structures cibles déposent des permis sur au moins trois années différentes : 25 bailleurs sociaux et 14 structures sociales ou médico-sociales. Parmi elles, Fondation Mallet (33 permis), Avenir APEI, Association Delos APEI 78, APAJH Yvelines, L'Arche d'Aigrefoin, la Croix-Rouge et Sauvegarde Enfance Adolescence Yvelines.
-- **Des projets peut-être en difficulté.** 16 permis de structures cibles ou de résidences sociales sont autorisés sans aucune déclaration de chantier et atteignent la fin de leur validité dans les 12 mois. La règle est celle de l'art. R\*424-17 du code de l'urbanisme (3 ans), portée à 5 ans pour les permis délivrés entre le 28/05/2022 et le 28/05/2024 (décret n° 2025-461). Un projet qui ne démarre pas a peut-être besoin d'aide, mais c'est un signal à vérifier, pas une certitude.
+- **Des clients au besoin récurrent.** 42 structures cibles déposent des permis sur au moins trois années différentes : 27 bailleurs sociaux, 14 structures sociales ou médico-sociales et 1 structure de l'ESS. Parmi elles, Fondation Mallet (33 permis), Avenir APEI, Association Delos APEI 78, APAJH Yvelines, L'Arche d'Aigrefoin, la Croix-Rouge et Sauvegarde Enfance Adolescence Yvelines.
+- **Des projets peut-être en difficulté.** 18 permis de structures cibles ou de résidences sociales sont autorisés sans aucune déclaration de chantier et atteignent la fin de leur validité dans les 12 mois. La règle est celle de l'art. R\*424-17 du code de l'urbanisme (3 ans), portée à 5 ans pour les permis délivrés entre le 28/05/2022 et le 28/05/2024 (décret n° 2025-461). Un projet qui ne démarre pas a peut-être besoin d'aide, mais c'est un signal à vérifier, pas une certitude.
 - **10 fiches prospects sourcées** rassemblent ces signaux par structure (`results/fiches_prospects.md`).
 
 ## 3. Ce qui est établi, ce qui est fragile, ce qui manque
 
-**Établi.** 497 demandeurs (13 %) ont une famille et une activité connues de façon traçable. Les chiffres sont reproductibles. 53 tests couvrent les règles, le garde-fou, les patterns, la cohérence des données et l'audit des décisions de l'agent. Aucune donnée de personne physique n'est collectée : les dirigeants renvoyés par Sirène sont filtrés dans le code.
+**Établi.** 570 demandeurs (14 %) ont une famille et une activité connues de façon traçable, dont 84 structures cibles. Les chiffres sont reproductibles. 53 tests couvrent les règles, le garde-fou, les patterns, la cohérence des données et l'audit des décisions de l'agent. Aucune donnée de personne physique n'est collectée : les dirigeants renvoyés par Sirène sont filtrés dans le code.
 
 **Fragile.**
 
@@ -36,8 +36,8 @@ Périmètre : 7 092 permis de construire (Sitadel, millésime d'octobre 2026) d�
 
 **Manque.**
 
-- Après les règles, 3 461 demandeurs restaient à qualifier. L'agent en a traité 106 avant que le plafond de dépense de la clé API soit atteint. Il n'a trouvé aucune nouvelle cible : il trie (67 associations hors champ, 22 promoteurs) plus qu'il ne découvre.
-- On ne sait pas qui est derrière les 1 721 SCI et SCCV.
+- Après les règles, 3 461 demandeurs restaient à qualifier. L'agent a examiné les 200 plus prometteurs. Il a trouvé 3 structures cibles que mes règles avaient manquées, faute de « HLM » dans leur nom : Immobilière 3F (48 permis, 1 358 logements sociaux), Logement Français et Foncière d'Habitat et Humanisme. Pour le reste, il trie (106 associations hors champ, 68 « autre ») plus qu'il ne découvre. Les 3 261 autres demandeurs restent « non déterminés ».
+- On ne sait pas qui est derrière les quelque 1 720 SCI et SCCV.
 - La base ne dit ni qui exploitera le bâtiment, ni ce que contiennent les permis modificatifs. Environ 15 % des ouvertures de chantier ne sont jamais déclarées.
 
 ## 4. Ce que je ferais ensuite
