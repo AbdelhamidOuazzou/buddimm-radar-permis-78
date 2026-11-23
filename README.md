@@ -62,7 +62,7 @@ reste **« non déterminé »**.
 | Pattern | Résultat | Fichier |
 |---|---|---|
 | **Clients réguliers** (≥ 3 permis sur ≥ 3 années) | 362 demandeurs réguliers, dont **39 structures cibles** (25 bailleurs sociaux, 14 médico-sociaux) | `prospects_reguliers.csv` |
-| **Projets sociaux / médico-sociaux « cachés »** : permis de résidence pour personnes âgées, handicapées ou sociale | **68 permis (55 demandeurs), dont 4 seulement déposés par une association ou fondation** ; 39 par un demandeur qui n'est pas une structure cible : 23 classés « autre » par l'agent (promotion immobilière d'après Sirène : Bouygues Immobilier, Eiffage, Linkcity, Altarea Cogedim…) et 16 SCI/SCCV | `projets_sociaux.csv` |
+| **Projets sociaux / médico-sociaux « cachés »** : permis de résidence pour personnes âgées, handicapées ou sociale | **68 permis (55 demandeurs), dont 4 seulement déposés par une association ou fondation** ; 39 par un demandeur qui n'est pas une structure cible : 23 classés « autre » par l'agent (dont 14 en « promotion immobilière de logements » d'après Sirène : Bouygues Immobilier, Eiffage, Linkcity, Altarea Cogedim… ; les autres surtout marchands de biens ou sociétés immobilières) et 16 SCI/SCCV | `projets_sociaux.csv` |
 | **Échéances** : permis autorisés, sans aucune déclaration de chantier, dont la validité théorique échoit dans les 12 mois | **16 permis** à vérifier | `echeances.csv` |
 | **Fiches prospects** : les 10 structures cibles au score le plus élevé, avec leurs permis sourcés | 10 fiches | `fiches_prospects.md` |
 
