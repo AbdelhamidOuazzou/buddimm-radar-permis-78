@@ -200,7 +200,7 @@ avec les demandeurs.
 
 ## Outils et temps passé
 
-- Assistant de code : **Claude (Claude Code)** pour la conception et l'écriture du code, revue par l'auteur.
+- Assistant de code : **Claude (Claude Code)**, qui a écrit l'essentiel du code, de la démo et une première version de la note, à partir des choix de l'auteur (sujet, angle, vérifications).
 - Modèle de l'agent : `azure_ai/gpt-5.4`, via le proxy compatible OpenAI d'un établissement universitaire.
 - Python, pandas, requests, openai, pytest.
-- Temps passé : 10 heures.
+- Temps passé : environ 20 heures, réparties sur 3 jours à partir du 21 novembre 2026.
